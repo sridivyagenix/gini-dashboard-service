@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 public class SalesDashboardResponse {
     BigDecimal CurrentSales;
     Long TotalNumberOfSales;
-    BigDecimal MonthlyGoal;
     BigDecimal Goal;
     BigDecimal Drop;
 }
