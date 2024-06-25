@@ -11,7 +11,6 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/dashboard")
 public class EmployeeController {
     private final EmployeeService employeeService;
 
