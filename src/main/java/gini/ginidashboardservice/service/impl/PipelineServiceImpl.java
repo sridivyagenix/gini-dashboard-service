@@ -1,15 +1,16 @@
 package gini.ginidashboardservice.service.impl;
 
 import gini.ginidashboardservice.dto.PipelineDashboardResponse;
+import gini.ginidashboardservice.dto.StageSummary;
 import gini.ginidashboardservice.models.SalesPipelineEntries;
 import gini.ginidashboardservice.repositories.SalesPipelineEntriesRepository;
 import gini.ginidashboardservice.service.PipelineService;
 import gini.ginidashboardservice.utils.CalculateDates;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class PipelineServiceImpl implements PipelineService{
@@ -43,5 +44,10 @@ public class PipelineServiceImpl implements PipelineService{
                         stages)
                 .map(SalesPipelineEntries::getTargetPremiumAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @Override
+    public Flux<StageSummary> getPoliciesCountAndPremiumSumByStageForEmployee(Long employeeId) {
+        return salesPipelineEntryRepository.findPoliciesCountAndPremiumSumByStageForEmployee(employeeId);
     }
 }
