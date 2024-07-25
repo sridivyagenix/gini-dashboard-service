@@ -1,4 +1,4 @@
-FROM amazoncorretto:11.0.4
+FROM amazoncorretto:17.0.0
 
 WORKDIR /home/app/
 ADD target/*.jar /home/app/app.jar
