@@ -1,10 +1,12 @@
 package gini.ginidashboardservice.repositories;
 
 import gini.ginidashboardservice.models.Employee;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Mono;
+
+import java.util.Optional;
+
 @Repository
-public interface EmployeeRepository extends ReactiveCrudRepository<Employee, Long> {
-    Mono<Employee> findById(Long employeeId);
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+    Optional<Employee> findById(Long employeeId);
 }

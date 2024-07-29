@@ -1,19 +1,17 @@
 package gini.ginidashboardservice.service.impl;
 
 import gini.ginidashboardservice.dto.SalesDashboardResponse;
-import gini.ginidashboardservice.models.EmployeeGoal;
 import gini.ginidashboardservice.models.SalesPipelineEntries;
-//import gini.ginidashboardservice.repositories.EmployeeGoalRepository;
 import gini.ginidashboardservice.repositories.EmployeeGoalRepository;
 import gini.ginidashboardservice.repositories.SalesPipelineEntriesRepository;
 import gini.ginidashboardservice.service.SalesService;
 import gini.ginidashboardservice.utils.CalculateDates;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,43 +22,48 @@ public class SalesServiceImpl implements SalesService{
     private final EmployeeGoalRepository employeeGoalDenormRepository;
 
     @Override
-    public Mono<SalesDashboardResponse> getSalesInfo(Long employeeId) {
-        return Mono.zip(
-                getTotalTargetPremiumAmountByEmployeeIdAndCurrentYear(employeeId),
-                getDistinctPolicyCountByEmployeeIdAndYear(employeeId),
-                getTargetAmountByEmployeeId(employeeId)
-        ).map(values -> {
-            BigDecimal currentSales = values.getT1();
-            Long totalSales = values.getT2();
-            BigDecimal goal = values.getT3();
+    public SalesDashboardResponse getSalesInfo(Long employeeId) {
+        // Call each method synchronously
+        BigDecimal currentSales = getTotalTargetPremiumAmountByEmployeeIdAndCurrentYear(employeeId);
+        Long totalSales = getDistinctPolicyCountByEmployeeIdAndYear(employeeId);
+        BigDecimal goal = getTargetAmountByEmployeeId(employeeId);
 
-            SalesDashboardResponse response = new SalesDashboardResponse();
-            response.setCurrentSales(currentSales);
-            response.setTotalNumberOfSales(totalSales);
-            response.setGoal(goal);
+        // Create and populate the response object
+        SalesDashboardResponse response = new SalesDashboardResponse();
+        response.setCurrentSales(currentSales);
+        response.setTotalNumberOfSales(totalSales);
+        response.setGoal(goal);
 
-            // Calculate the difference and percentage drop
-            BigDecimal difference = currentSales.subtract(goal);
-            BigDecimal percentage = difference
+        // Calculate the difference and percentage drop
+        BigDecimal difference = currentSales.subtract(goal);
+        BigDecimal percentage = BigDecimal.ZERO;
+        if (goal.compareTo(BigDecimal.ZERO) > 0) {
+            percentage = difference
                     .divide(goal, 2, RoundingMode.HALF_UP)
                     .multiply(BigDecimal.valueOf(100));
-            response.setDrop(percentage);
+        }
+        response.setDrop(percentage);
 
-            return response;
-        });
+        return response;
     }
 
-    private Mono<BigDecimal> getTotalTargetPremiumAmountByEmployeeIdAndCurrentYear(Long employeeId) {
-        return salesPipelineEntryRepository.findByEmployeeIdAndCreatedDtBetweenAndStage(
-                        employeeId,
-                        calculateDates.getStartDate(),
-                        calculateDates.getEndDate(),
-                        "Closed Won")
+    private BigDecimal getTotalTargetPremiumAmountByEmployeeIdAndCurrentYear(Long employeeId) {
+        // Fetch all the sales pipeline entries based on the criteria
+        List<SalesPipelineEntries> entries = salesPipelineEntryRepository.findByEmployeeIdAndCreatedDtBetweenAndStage(
+                employeeId,
+                calculateDates.getStartDate(),
+                calculateDates.getEndDate(),
+                "Closed Won");
+
+        // Calculate the total target premium amount
+        return entries.stream()
                 .map(SalesPipelineEntries::getTargetPremiumAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private Mono<Long> getDistinctPolicyCountByEmployeeIdAndYear(Long employeeId) {
+
+    private Long getDistinctPolicyCountByEmployeeIdAndYear(Long employeeId) {
+        // Fetch the count of distinct policy numbers synchronously
         return salesPipelineEntryRepository.countDistinctPolicyNoByEmployeeIdAndCreatedDtBetweenAndStage(
                 employeeId,
                 calculateDates.getStartDate(),
@@ -68,7 +71,7 @@ public class SalesServiceImpl implements SalesService{
                 "Closed Won");
     }
 
-    private Mono<BigDecimal> getTargetAmountByEmployeeId(Long employeeId) {
+    private BigDecimal getTargetAmountByEmployeeId(Long employeeId) {
         return employeeGoalRepository.calculateSumOfGoalsByEmployeeId(employeeId);
     }
 

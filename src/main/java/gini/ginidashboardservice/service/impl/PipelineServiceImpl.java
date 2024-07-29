@@ -8,10 +8,10 @@ import gini.ginidashboardservice.service.PipelineService;
 import gini.ginidashboardservice.utils.CalculateDates;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,31 +25,39 @@ public class PipelineServiceImpl implements PipelineService{
     }
 
     @Override
-    public Mono<PipelineDashboardResponse> getPipelineInfo(Long employeeId) {
-        return getPipelineSalesByEmployeeIdAndCurrentYear(employeeId)
-                .map(pipelineSales -> {
-                    PipelineDashboardResponse response = new PipelineDashboardResponse();
-                    response.setPipelineSales(pipelineSales);
-                    return response;
-                });
+    public PipelineDashboardResponse getPipelineInfo(Long employeeId) {
+        BigDecimal pipelineSales = getPipelineSalesByEmployeeIdAndCurrentYear(employeeId);
+        PipelineDashboardResponse response = new PipelineDashboardResponse();
+        response.setPipelineSales(pipelineSales);
+        return response;
     }
 
-    private Mono<BigDecimal> getPipelineSalesByEmployeeIdAndCurrentYear(Long employeeId) {
+    private BigDecimal getPipelineSalesByEmployeeIdAndCurrentYear(Long employeeId) {
         String[] opportunityType = {"New Policy Sale", "Cross-Sell Opportunity"};
         String[] stages = {"Qualification", "Underwriting", "Proposal", "Negotiation", "Needs Analysis", "Prospecting"};
 
-        return salesPipelineEntryRepository.findByEmployeeIdAndCreatedDtBetweenAndOpportunityTypeInAndStageIn(
+        List<SalesPipelineEntries> entries = salesPipelineEntryRepository
+                .findByEmployeeIdAndCreatedDtBetweenAndOpportunityTypeInAndStageIn(
                         employeeId,
                         calculateDates.getStartDate(),
                         calculateDates.getEndDate(),
                         opportunityType,
-                        stages)
+                        stages);
+
+        // Calculate the total target premium amount
+        return entries.stream()
                 .map(SalesPipelineEntries::getTargetPremiumAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
-    public Flux<StageSummary> getPoliciesCountAndPremiumSumByStageForEmployee(Long employeeId) {
-        return salesPipelineEntryRepository.findPoliciesCountAndPremiumSumByStageForEmployee(employeeId);
+    public List<StageSummary> getPoliciesCountAndPremiumSumByStageForEmployee(Long employeeId) {
+        List<Object[]> results = salesPipelineEntryRepository.findPoliciesCountAndPremiumSumByStageForEmployee(employeeId);
+
+        return results.stream().map(result -> new StageSummary(
+                (String) result[0],               // stage
+                ((Number) result[1]).longValue(),  // policy_count
+                ((BigDecimal) result[2]) // premium_sum
+        )).collect(Collectors.toList());
     }
 }

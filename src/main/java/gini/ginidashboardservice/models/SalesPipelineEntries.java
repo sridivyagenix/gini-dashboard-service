@@ -5,85 +5,83 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 @Entity
 @Data
-@Table("sales_pipeline_entries")
+@Table(name ="sales_pipeline_entries")
 public class SalesPipelineEntries {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column("sales_pipeline_entry_id")
+    @Column(name ="sales_pipeline_entry_id")
     private Long salesPipelineEntryId;
 
-    @Column("company_id")
+    @Column(name ="company_id")
     private Long companyId;
 
-    @Column("bus_unit_name")
+    @Column(name ="bus_unit_name")
     private String busUnitName;
 
-    @Column("opportunity_id")
+    @Column(name ="opportunity_id")
     private Long opportunityId;
 
-    @Column("opportunity_type")
+    @Column(name ="opportunity_type")
     private String opportunityType;
 
-    @Column("customer_id")
+    @Column(name ="customer_id")
     private Long customerId;
 
-    @Column("sales_agent_id")
+    @Column(name ="sales_agent_id")
     private Long salesAgentId;
 
-    @Column("employee_id")
+    @Column(name ="employee_id")
     private Long employeeId;
 
-    @Column("product_type")
+    @Column(name ="product_type")
     private String productType;
 
-    @Column("product_name")
+    @Column(name ="product_name")
     private String productName;
 
-    @Column("policy_no")
+    @Column(name ="policy_no")
     private String policyNo;
 
-    @Column("policy_amount")
+    @Column(name ="policy_amount")
     private BigDecimal policyAmount;
 
-    @Column("target_premium_amount")
+    @Column(name ="target_premium_amount")
     private BigDecimal targetPremiumAmount;
 
-    @Column("estimated_revenue_for_sales_goal")
+    @Column(name ="estimated_revenue_for_sales_goal")
     private BigDecimal estimatedRevenueForSalesGoal;
 
-    @Column("stage")
+    @Column(name = "stage")
     private String stage;
 
-    @Column("outcome")
+    @Column(name = "outcome")
     private String outcome;
 
-    @Column("next_steps")
+    @Column(name = "next_steps")
     private String nextSteps;
 
-    @Column("notes")
+    @Column(name = "notes")
     private String notes;
 
-    @Column("created_dt")
+    @Column(name = "created_dt")
     private LocalDateTime createdDt;
 
-    @Column("last_modified_dt")
+    @Column(name = "last_modified_dt")
     private LocalDateTime lastModifiedDt;
 
-    @Column("uw__status")
+    @Column(name = "uw__status")
     private String uwStatus;
 
-    @Column("uw__decision")
+    @Column(name = "uw__decision")
     private String uwDecision;
 
-    @Column("created_at")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column("last_modified_at")
+    @Column(name = "last_modified_at")
     private LocalDateTime lastModifiedAt;
 
 }

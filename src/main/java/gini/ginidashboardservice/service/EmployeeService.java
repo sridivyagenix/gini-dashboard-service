@@ -1,8 +1,9 @@
 package gini.ginidashboardservice.service;
 
 import gini.ginidashboardservice.models.Employee;
-import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 public interface EmployeeService {
-    Mono<Employee> getEmployeeById(Long employeeId);
+    Optional<Employee> getEmployeeById(Long employeeId);
 }

@@ -1,26 +1,33 @@
 package gini.ginidashboardservice.models;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table("employees")
+@Table(name ="employees")
 public class Employee {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "employee_id", nullable = false)
     private Long employeeId;
 
-    @Column("employee_name")
+    @Column(name = "employee_name")
     private String employeeName;
 
-    @Column("email")
+    @Column(name = "email")
     private String email;
 
-    @Column("last_modified_at")
+    @Column(name = "last_modified_at")
     private LocalDateTime lastModifiedAt;
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
 }

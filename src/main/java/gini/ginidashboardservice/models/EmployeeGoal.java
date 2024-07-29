@@ -1,12 +1,7 @@
 package gini.ginidashboardservice.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,30 +12,30 @@ public class EmployeeGoal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column("employee_goal_id")
+    @Column(name ="employee_goal_id")
     private Long employeeGoalId;
 
-    @Column("company_id")
+    @Column(name ="company_id")
     private Long companyId;
 
-    @Column("team_goal_id")
+    @Column(name ="team_goal_id")
     private Long teamGoalId;
 
-    @Column("employee_id")
+    @Column(name ="employee_id")
     private Long employeeId;
 
-    @Column("target_amount")
+    @Column(name ="target_amount")
     private BigDecimal targetAmount;
 
-    @Column("status")
+    @Column(name ="status")
     private String status;
 
-    @Column("metadata")
+    @Column(name ="metadata")
     private String metadata;
 
-    @Column("created_at")
+    @Column(name ="created_at")
     private LocalDateTime createdAt;
 
-    @Column("last_modified_at")
+    @Column(name ="last_modified_at")
     private LocalDateTime lastModifiedAt;
 }
