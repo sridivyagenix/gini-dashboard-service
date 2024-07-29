@@ -6,6 +6,7 @@ import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,7 +14,7 @@ import reactor.core.publisher.Mono;
 import java.util.Date;
 import java.util.List;
 
-public interface SalesPipelineEntriesRepository extends R2dbcRepository<SalesPipelineEntries, Long> {
+public interface SalesPipelineEntriesRepository extends ReactiveCrudRepository<SalesPipelineEntries, Long> {
     Flux<SalesPipelineEntries> findByEmployeeIdAndCreatedDtBetweenAndStage(Long employeeId, Date startDate, Date endDate, String closedWon);
 
     Mono<Long> countDistinctPolicyNoByEmployeeIdAndCreatedDtBetweenAndStage(Long employeeId, Date startDate, Date endDate, String closedWon);
