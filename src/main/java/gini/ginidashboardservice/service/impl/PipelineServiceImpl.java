@@ -6,12 +6,14 @@ import gini.ginidashboardservice.models.SalesPipelineEntries;
 import gini.ginidashboardservice.repositories.SalesPipelineEntriesRepository;
 import gini.ginidashboardservice.service.PipelineService;
 import gini.ginidashboardservice.utils.CalculateDates;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 
+@Slf4j
 @Service
 public class PipelineServiceImpl implements PipelineService{
     private final SalesPipelineEntriesRepository salesPipelineEntryRepository;

@@ -39,6 +39,7 @@ public class SalesServiceImpl implements SalesService{
             response.setTotalNumberOfSales(totalSales);
             response.setGoal(goal);
 
+            // Calculate the difference and percentage drop
             BigDecimal difference = currentSales.subtract(goal);
             BigDecimal percentage = difference
                     .divide(goal, 2, RoundingMode.HALF_UP)
@@ -50,16 +51,25 @@ public class SalesServiceImpl implements SalesService{
     }
 
     private Mono<BigDecimal> getTotalTargetPremiumAmountByEmployeeIdAndCurrentYear(Long employeeId) {
-        return salesPipelineEntryRepository.findByEmployeeIdAndCreatedDtBetweenAndStage(employeeId, calculateDates.getStartDate(), calculateDates.getEndDate(), "Closed Won")
+        return salesPipelineEntryRepository.findByEmployeeIdAndCreatedDtBetweenAndStage(
+                        employeeId,
+                        calculateDates.getStartDate(),
+                        calculateDates.getEndDate(),
+                        "Closed Won")
                 .map(SalesPipelineEntries::getTargetPremiumAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private Mono<Long> getDistinctPolicyCountByEmployeeIdAndYear(Long employeeId) {
-        return salesPipelineEntryRepository.countDistinctPolicyNoByEmployeeIdAndCreatedDtBetweenAndStage(employeeId, calculateDates.getStartDate(), calculateDates.getEndDate(), "Closed Won");
+        return salesPipelineEntryRepository.countDistinctPolicyNoByEmployeeIdAndCreatedDtBetweenAndStage(
+                employeeId,
+                calculateDates.getStartDate(),
+                calculateDates.getEndDate(),
+                "Closed Won");
     }
 
     private Mono<BigDecimal> getTargetAmountByEmployeeId(Long employeeId) {
         return employeeGoalRepository.calculateSumOfGoalsByEmployeeId(employeeId);
     }
+
 }
