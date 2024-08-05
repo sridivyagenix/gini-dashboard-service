@@ -8,16 +8,6 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "activities")
-@SqlResultSetMapping(
-        name = "ActivityResponseMapping",
-        classes = @ConstructorResult(
-                targetClass = ActivityResponse.class,
-                columns = {
-                        @ColumnResult(name = "activityType", type = String.class),
-                        @ColumnResult(name = "count", type = Long.class)
-                }
-        )
-)
 public class Activity {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
