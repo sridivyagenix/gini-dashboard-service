@@ -3,7 +3,10 @@ package gini.ginidashboardservice.controllers;
 import gini.ginidashboardservice.dto.PipelineDashboardResponse;
 import gini.ginidashboardservice.dto.StageSummary;
 import gini.ginidashboardservice.service.PipelineService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,12 +22,18 @@ public class PipelineController {
     }
 
     @GetMapping("/pipeline")
-    public PipelineDashboardResponse getPipelineInfo(@RequestParam Long employeeId)
+    public ResponseEntity<PipelineDashboardResponse> getPipelineInfo(@RequestHeader("X-Username") Long loggedInEmployeeId, @RequestParam Long employeeId)
     {
-        return pipelineService.getPipelineInfo(employeeId);
+        if (!employeeId.equals(loggedInEmployeeId)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(pipelineService.getPipelineInfo(employeeId));
     }
     @GetMapping("/stages")
-    public List<StageSummary> getPoliciesCountAndPremiumSumByStage(@RequestParam("employeeId") Long employeeId) {
-        return pipelineService.getPoliciesCountAndPremiumSumByStageForEmployee(employeeId);
+    public ResponseEntity<List<StageSummary>> getPoliciesCountAndPremiumSumByStage(@RequestHeader("X-Username") Long loggedInEmployeeId, @RequestParam("employeeId") Long employeeId) {
+        if (!employeeId.equals(loggedInEmployeeId)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(pipelineService.getPoliciesCountAndPremiumSumByStageForEmployee(employeeId));
     }
 }

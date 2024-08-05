@@ -1,5 +1,6 @@
 package gini.ginidashboardservice.service.impl;
 
+import gini.ginidashboardservice.dto.ActivityResponse;
 import gini.ginidashboardservice.repositories.ActivityRepository;
 import gini.ginidashboardservice.service.ActivityService;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,7 @@ public class ActivityServiceImpl implements ActivityService {
         this.activityRepository = activityRepository;
     }
 
-    public Page<Object[]> getActivityTypeCountsByEmployeeId(Long employeeId, Pageable pageable) {
+    public Page<ActivityResponse> getActivityTypeCountsByEmployeeId(Long employeeId, Pageable pageable) {
         return activityRepository.findActivityTypeCountsByEmployeeId(employeeId, pageable);
     }
 }
