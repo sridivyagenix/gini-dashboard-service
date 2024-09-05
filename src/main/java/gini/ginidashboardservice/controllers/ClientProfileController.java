@@ -1,9 +1,10 @@
 package gini.ginidashboardservice.controllers;
 
+import gini.ginidashboardservice.dto.ClientProfileDTO;
 import gini.ginidashboardservice.models.ClientProfile;
 import gini.ginidashboardservice.service.ClientProfileService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,5 +20,14 @@ public class ClientProfileController {
     @GetMapping("/client-profiles")
     public List<ClientProfile> getAllClientProfiles() {
         return clientProfileService.getAllClientProfiles();
+    }
+
+    @PutMapping("/client-profiles/{clientId}")
+    public ResponseEntity<ClientProfile> updateClientProfile(
+            @PathVariable Long clientId,
+            @RequestBody ClientProfileDTO updatedProfile) {
+
+        ClientProfile updatedClientProfile = clientProfileService.updateClientProfile(clientId, updatedProfile);
+        return ResponseEntity.ok(updatedClientProfile);
     }
 }
