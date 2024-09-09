@@ -27,7 +27,14 @@ public class ClientProfileController {
             @PathVariable Long clientId,
             @RequestBody ClientProfileDTO updatedProfile) {
 
-        ClientProfile updatedClientProfile = clientProfileService.updateClientProfile(clientId, updatedProfile);
+        ClientProfile updatedClientProfile = clientProfileService.saveClientProfile(clientId, updatedProfile);
+        return ResponseEntity.ok(updatedClientProfile);
+    }
+    @PostMapping("/client-profiles")
+    public ResponseEntity<ClientProfile> createClientProfile(
+            @RequestBody ClientProfileDTO updatedProfile) {
+
+        ClientProfile updatedClientProfile = clientProfileService.saveClientProfile(null, updatedProfile);
         return ResponseEntity.ok(updatedClientProfile);
     }
 }

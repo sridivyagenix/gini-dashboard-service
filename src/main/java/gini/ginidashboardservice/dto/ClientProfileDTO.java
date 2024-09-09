@@ -1,6 +1,6 @@
 package gini.ginidashboardservice.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 @Data
+@Setter
+@Getter
+@RequiredArgsConstructor
 public class ClientProfileDTO {
-
     private Long companyId;
     private Long employeeId;
     private Long agentId;
