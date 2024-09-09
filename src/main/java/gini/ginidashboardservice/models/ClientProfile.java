@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Data
 @Entity
-@Table(name = "client_profile")
+@Table(name = "client_profiles")
 
 public class ClientProfile {
     @Id
