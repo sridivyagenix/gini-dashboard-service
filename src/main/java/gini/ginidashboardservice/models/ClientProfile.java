@@ -1,7 +1,7 @@
 package gini.ginidashboardservice.models;
 import gini.ginidashboardservice.utils.JsonConverter;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 
 import java.math.BigDecimal;
@@ -12,13 +12,14 @@ import java.util.Map;
 
 @Data
 @Entity
+@Setter
+@Getter
+@RequiredArgsConstructor
 @Table(name = "client_profiles")
-
 public class ClientProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long clientId;
-
     private Long companyId;
     private Long employeeId;
     private Long agentId;
