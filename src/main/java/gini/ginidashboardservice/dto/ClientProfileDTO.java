@@ -29,6 +29,7 @@ public class ClientProfileDTO {
     private Map<String, Object> employer;
     private List<Map<String, Object>> insuranceCoverageDetails;
     private Map<String, Object> beneficiaries;
+    private Map<String, Object> education;
     private Map<String, Object> healthInfo;
     private Map<String, Object> lifestyleBackgroundInfo;
     private Map<String, Object> declarations;
@@ -41,6 +42,9 @@ public class ClientProfileDTO {
     private Map<String, Object> riskAppetite;
     private Map<String, Object> financialGoals;
     private String additionalInfo;
+    private LocalDateTime profileCreatedDt;
     private LocalDateTime profileUpdatedDt;
+    private Map<String, Object> complete_customer_profile;
+    private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
 }
