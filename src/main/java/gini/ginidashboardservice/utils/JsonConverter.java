@@ -15,6 +15,9 @@ public class JsonConverter<T> implements AttributeConverter<T, String> {
 
     @Override
     public String convertToDatabaseColumn(T attribute) {
+        if (attribute == null) {
+            return null; // Handle null value
+        }
         try {
             return objectMapper.writeValueAsString(attribute);
         } catch (JsonProcessingException e) {
@@ -24,6 +27,9 @@ public class JsonConverter<T> implements AttributeConverter<T, String> {
 
     @Override
     public T convertToEntityAttribute(String dbData) {
+        if (dbData == null || dbData.isEmpty()) {
+            return null; // Handle null or empty string
+        }
         try {
             return (T) objectMapper.readValue(dbData, Object.class);
         } catch (IOException e) {

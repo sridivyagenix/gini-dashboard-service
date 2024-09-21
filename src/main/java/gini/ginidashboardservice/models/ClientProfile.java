@@ -46,6 +46,9 @@ public class ClientProfile {
     private Map<String, Object> beneficiaries;
 
     @Convert(converter = JsonConverter.class)
+    private Map<String, Object> education;
+
+    @Convert(converter = JsonConverter.class)
     private Map<String, Object> healthInfo;
 
     @Convert(converter = JsonConverter.class)
@@ -81,7 +84,8 @@ public class ClientProfile {
     private String additionalInfo;
     private LocalDateTime profileCreatedDt;
     private LocalDateTime profileUpdatedDt;
-
+    @Convert(converter = JsonConverter.class)
+    private Map<String, Object> complete_customer_profile;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
 }
