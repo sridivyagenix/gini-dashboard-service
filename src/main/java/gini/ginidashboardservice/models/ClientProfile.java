@@ -88,4 +88,5 @@ public class ClientProfile {
     private Map<String, Object> complete_customer_profile;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
+    private String convId;
 }
