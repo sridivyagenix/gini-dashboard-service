@@ -48,7 +48,7 @@ public class JsonConverter<T> implements AttributeConverter<T, String> {
     }
 
     // If you need to use this method elsewhere (like in the Mapper)
-    public static String convertToJson(Map<String, Object> map) {
+    public String convertToJson(Map<String, Object> map) {
         try {
             return new ObjectMapper().writeValueAsString(map);
         } catch (JsonProcessingException e) {
