@@ -17,7 +17,7 @@ public interface ClientProfileMapper {
     void updateClientProfileFromDto(ClientProfileDTO dto, @MappingTarget ClientProfile entity);
 
     default String mapJsonField(Map<String, Object> value) {
-        return value != null ? JsonConverter.convertToJson(value) : null;
+        return value != null ? new JsonConverter().convertToJson(value) : null;
     }
 
     default Map<String, Object> mapToJsonField(String value) {
