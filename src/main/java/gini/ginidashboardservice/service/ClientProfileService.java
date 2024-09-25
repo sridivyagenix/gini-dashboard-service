@@ -5,6 +5,7 @@ import gini.ginidashboardservice.mapper.ClientProfileMapper;
 import gini.ginidashboardservice.models.ClientProfile;
 import gini.ginidashboardservice.repositories.ClientProfileRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
