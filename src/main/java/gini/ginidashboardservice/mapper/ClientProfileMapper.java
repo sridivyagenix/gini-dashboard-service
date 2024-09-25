@@ -8,13 +8,13 @@ import org.mapstruct.MappingTarget;
 
 import java.util.Map;
 
-@Mapper(componentModel = "spring")
+//@Mapper(componentModel = "spring")
 public interface ClientProfileMapper {
     ClientProfile toEntity(ClientProfileDTO dto);
 
     ClientProfileDTO toDto(ClientProfile entity);
 
-    void updateClientProfileFromDto(ClientProfileDTO dto, @MappingTarget ClientProfile entity);
+    void updateClientProfileFromDto(ClientProfileDTO dto,ClientProfile entity);
 
     default String mapJsonField(Map<String, Object> value) {
         return value != null ? new JsonConverter().convertToJson(value) : null;
