@@ -8,7 +8,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.Map;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface ClientProfileMapper {
     ClientProfile toEntity(ClientProfileDTO dto);
 
