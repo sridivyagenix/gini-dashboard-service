@@ -22,7 +22,7 @@ public class InterventionRepository {
         // Construct the SQL query
         String sql = "SELECT employee_id,a.interaction_type AS type, COUNT(*) AS count FROM interactions a " +
                 "WHERE a.employee_id = :employeeId " +
-                "AND a.last_modified_at BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 180 DAY) AND CURRENT_DATE() " +
+                "AND a.last_modified_at BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY) AND CURRENT_DATE() " +
                 "GROUP BY type " +
                 "ORDER BY count DESC";
         // Execute the query for the results
@@ -36,7 +36,7 @@ public class InterventionRepository {
         Query countQuery = entityManager.createNativeQuery(
                 "SELECT COUNT(DISTINCT a.interaction_type) FROM interactions a " +
                         "WHERE a.employee_id = :employeeId " +
-                        "AND a.last_modified_at BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 180 DAY) AND CURRENT_DATE()");
+                        "AND a.last_modified_at BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY) AND CURRENT_DATE()");
         countQuery.setParameter("employeeId", employeeId);
         Long total = ((Number) countQuery.getSingleResult()).longValue();
 

@@ -21,7 +21,7 @@ public class ActivityRepository{
         // Construct the SQL query
         String sql = "SELECT a.activity_type AS activityType, COUNT(*) AS count FROM activities a " +
                 "WHERE a.employee_id = :employeeId " +
-                "AND a.last_modified_dt BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 360 DAY) AND CURRENT_DATE() " +
+                "AND a.last_modified_dt BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY) AND CURRENT_DATE() " +
                 "GROUP BY a.activity_type " +
                 "ORDER BY count DESC";
 
@@ -36,7 +36,7 @@ public class ActivityRepository{
         Query countQuery = entityManager.createNativeQuery(
                 "SELECT COUNT(DISTINCT a.activity_type) FROM activities a " +
                         "WHERE a.employee_id = :employeeId " +
-                        "AND a.last_modified_dt BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 360 DAY) AND CURRENT_DATE()");
+                        "AND a.last_modified_dt BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY) AND CURRENT_DATE()");
         countQuery.setParameter("employeeId", employeeId);
         Long total = ((Number) countQuery.getSingleResult()).longValue();
 
