@@ -2,6 +2,7 @@ package gini.ginidashboardservice.controllers;
 
 import gini.ginidashboardservice.dto.ActivityResponse;
 import gini.ginidashboardservice.dto.InterventionResponse;
+import gini.ginidashboardservice.dto.PeopleDTO;
 import gini.ginidashboardservice.service.InterventionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class InterventionsController {
@@ -33,5 +36,11 @@ public class InterventionsController {
 
         Page<InterventionResponse> interventions = interventionService.getInterventionTypeCountsByEmployeeId(employeeId, PageRequest.of(page, size));
         return ResponseEntity.ok(interventions);
+    }
+    @GetMapping("/critical-conversation")
+    public ResponseEntity<Page<PeopleDTO>> getInteractionDetails(@RequestParam Long employeeId,@RequestParam int page,
+                                                                 @RequestParam int size) {
+        Page<PeopleDTO> interactionDetails = interventionService.getInteractionsWithAgentNames(employeeId, PageRequest.of(page, size));
+        return ResponseEntity.ok(interactionDetails);
     }
 }
