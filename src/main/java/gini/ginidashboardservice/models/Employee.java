@@ -20,8 +20,8 @@ public class Employee {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "last_modified_at")
-    private LocalDateTime lastModifiedAt;
+    @Column(name = "last_logged_in")
+    private LocalDateTime lastLoggedIn;
 
     public Long getEmployeeId() {
         return employeeId;
