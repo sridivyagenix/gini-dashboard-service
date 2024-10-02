@@ -37,7 +37,7 @@ public class InterventionsController {
         Page<InterventionResponse> interventions = interventionService.getInterventionTypeCountsByEmployeeId(employeeId, PageRequest.of(page, size));
         return ResponseEntity.ok(interventions);
     }
-    @GetMapping("/people")
+    @GetMapping("/critical-conversation")
     public ResponseEntity<Page<PeopleDTO>> getInteractionDetails(@RequestParam Long employeeId,@RequestParam int page,
                                                                  @RequestParam int size) {
         Page<PeopleDTO> interactionDetails = interventionService.getInteractionsWithAgentNames(employeeId, PageRequest.of(page, size));
