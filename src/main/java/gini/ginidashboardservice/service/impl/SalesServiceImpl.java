@@ -1,8 +1,10 @@
 package gini.ginidashboardservice.service.impl;
 
+import gini.ginidashboardservice.dto.SalesAgentSummary;
 import gini.ginidashboardservice.dto.SalesDashboardResponse;
 import gini.ginidashboardservice.models.SalesPipelineEntries;
 import gini.ginidashboardservice.repositories.EmployeeGoalRepository;
+import gini.ginidashboardservice.repositories.SalesAgentRepository;
 import gini.ginidashboardservice.repositories.SalesPipelineEntriesRepository;
 import gini.ginidashboardservice.service.SalesService;
 import gini.ginidashboardservice.utils.CalculateDates;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +23,7 @@ public class SalesServiceImpl implements SalesService{
     private final EmployeeGoalRepository employeeGoalRepository;
     private final CalculateDates calculateDates;
     private final EmployeeGoalRepository employeeGoalDenormRepository;
+    private final SalesAgentRepository salesAgentRepository;
 
     @Override
     public SalesDashboardResponse getSalesInfo(Long employeeId) {
@@ -75,4 +79,19 @@ public class SalesServiceImpl implements SalesService{
         return employeeGoalRepository.calculateSumOfGoalsByEmployeeId(employeeId);
     }
 
+@Override
+    public List<SalesAgentSummary> getTopSalesAgents(String agentName) {
+    List<Object[]> results = salesAgentRepository.findTopSalesAgents(agentName);
+    List<SalesAgentSummary> salesAgentSummaries = new ArrayList<>();
+
+    for (Object[] result : results) {
+        String name = (String) result[0];
+        String email = (String) result[1];
+        BigDecimal totalTargetPremium = (BigDecimal) result[2];
+
+        salesAgentSummaries.add(new SalesAgentSummary(name, email, totalTargetPremium));
+    }
+
+    return salesAgentSummaries;
+}
 }
