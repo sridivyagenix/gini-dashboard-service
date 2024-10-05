@@ -1,14 +1,18 @@
 package gini.ginidashboardservice.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 @Component
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PipelineDashboardResponse {
     BigDecimal PipelineSales;
-    private BigDecimal appsSales = new BigDecimal("45800000.00");
-    private BigDecimal healthSales = new BigDecimal("45800000.00");
-    private BigDecimal conversationRate = new BigDecimal("45800000.00");
+    long appsSales = 7;
+    String healthSales = "Robust";
+    String  conversationRate = "65%";
 }
