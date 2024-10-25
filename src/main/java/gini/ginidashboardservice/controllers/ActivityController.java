@@ -1,7 +1,6 @@
 package gini.ginidashboardservice.controllers;
 
 import gini.ginidashboardservice.dto.ActivityResponse;
-import gini.ginidashboardservice.dto.PipelineDashboardResponse;
 import gini.ginidashboardservice.service.ActivityService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 public class ActivityController {
     private final ActivityService activityService;
@@ -21,7 +22,7 @@ public class ActivityController {
     }
 
     @GetMapping("/activities")
-    public ResponseEntity<Page<ActivityResponse>> getActivityTypeCounts(
+    public CompletableFuture<ResponseEntity<Page<ActivityResponse>>> getActivityTypeCounts(
             @RequestHeader("X-Username") Long loggedInEmployeeId,
             @RequestParam Long id,
             @RequestParam(value = "userType", defaultValue = "employee") String userType,
@@ -33,10 +34,10 @@ public class ActivityController {
             response = activityService.getActivityTypeCountsByAgentId(id, PageRequest.of(page, size));  // Call sales agent-specific service
         } else {
             if (!id.equals(loggedInEmployeeId)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
             }
             response = activityService.getActivityTypeCountsByEmployeeId(id, PageRequest.of(page, size));  // Call employee-specific service
         }
-        return ResponseEntity.ok(response);
+        return CompletableFuture.completedFuture(ResponseEntity.ok(response));
     }
 }

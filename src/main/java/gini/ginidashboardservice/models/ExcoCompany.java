@@ -1,14 +1,19 @@
 package gini.ginidashboardservice.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "exco_companies", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"ticker", "fiscal_yr"})
-})
+@Table(name = "exco_companies")
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class ExcoCompany {
 
     @Id

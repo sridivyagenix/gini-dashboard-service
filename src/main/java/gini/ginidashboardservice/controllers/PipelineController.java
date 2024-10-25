@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class PipelineController {
@@ -22,24 +23,24 @@ public class PipelineController {
     }
 
     @GetMapping("/pipeline")
-    public ResponseEntity<PipelineDashboardResponse> getPipelineInfo(@RequestHeader("X-Username") Long loggedInEmployeeId, @RequestParam Long id, @RequestParam(value = "userType", defaultValue = "employee") String userType)
+    public CompletableFuture<ResponseEntity<Object>> getPipelineInfo(@RequestHeader("X-Username") Long loggedInEmployeeId, @RequestParam Long id, @RequestParam(value = "userType", defaultValue = "employee") String userType)
     {
         PipelineDashboardResponse response;
         if ("sales_agent".equalsIgnoreCase(userType)) {
             response = pipelineService.getPipelineInfoForSalesAgent(id);  // Call sales agent-specific service
         } else {
             if (!id.equals(loggedInEmployeeId)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
             }
             response = pipelineService.getPipelineInfo(id);  // Call employee-specific service
         }
-        return ResponseEntity.ok(response);
+        return CompletableFuture.completedFuture(ResponseEntity.ok(response));
     }
     @GetMapping("/stages")
-    public ResponseEntity<List<StageSummary>> getPoliciesCountAndPremiumSumByStage(@RequestHeader("X-Username") Long loggedInEmployeeId, @RequestParam("employeeId") Long employeeId) {
+    public CompletableFuture<ResponseEntity<List<StageSummary>>> getPoliciesCountAndPremiumSumByStage(@RequestHeader("X-Username") Long loggedInEmployeeId, @RequestParam("employeeId") Long employeeId) {
         if (!employeeId.equals(loggedInEmployeeId)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
         }
-        return ResponseEntity.ok(pipelineService.getPoliciesCountAndPremiumSumByStageForEmployee(employeeId));
+        return CompletableFuture.completedFuture(ResponseEntity.ok(pipelineService.getPoliciesCountAndPremiumSumByStageForEmployee(employeeId)));
     }
 }

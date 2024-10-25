@@ -1,6 +1,5 @@
 package gini.ginidashboardservice.controllers;
 
-import gini.ginidashboardservice.dto.ActivityResponse;
 import gini.ginidashboardservice.dto.InterventionResponse;
 import gini.ginidashboardservice.dto.PeopleDTO;
 import gini.ginidashboardservice.service.InterventionService;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class InterventionsController {
@@ -25,22 +24,22 @@ public class InterventionsController {
 
 
     @GetMapping("/interventions")
-    public ResponseEntity<Page<InterventionResponse>> getInterventionTypeCounts(
+    public CompletableFuture<ResponseEntity<Page<InterventionResponse>>> getInterventionTypeCounts(
             @RequestHeader("X-Username") Long loggedInEmployeeId,
             @RequestParam Long employeeId,
             @RequestParam int page,
             @RequestParam int size) {
         if (!employeeId.equals(loggedInEmployeeId)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
         }
 
         Page<InterventionResponse> interventions = interventionService.getInterventionTypeCountsByEmployeeId(employeeId, PageRequest.of(page, size));
-        return ResponseEntity.ok(interventions);
+        return CompletableFuture.completedFuture(ResponseEntity.ok(interventions));
     }
     @GetMapping("/critical-conversation")
-    public ResponseEntity<Page<PeopleDTO>> getInteractionDetails(@RequestParam Long employeeId,@RequestParam int page,
-                                                                 @RequestParam int size) {
+    public CompletableFuture<ResponseEntity<Page<PeopleDTO>>> getInteractionDetails(@RequestParam Long employeeId, @RequestParam int page,
+                                                                                    @RequestParam int size) {
         Page<PeopleDTO> interactionDetails = interventionService.getInteractionsWithAgentNames(employeeId, PageRequest.of(page, size));
-        return ResponseEntity.ok(interactionDetails);
+        return CompletableFuture.completedFuture(ResponseEntity.ok(interactionDetails));
     }
 }

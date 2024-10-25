@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,11 +22,11 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping("/employees/{id}")
-    public ResponseEntity<Optional<Employee>> getEmployeeById(@RequestHeader("X-Username") Long loggedInEmployeeId, @PathVariable("id") Long employeeId) {
+    public CompletableFuture<ResponseEntity<Optional<Employee>>> getEmployeeById(@RequestHeader("X-Username") Long loggedInEmployeeId, @PathVariable("id") Long employeeId) {
         if (!employeeId.equals(loggedInEmployeeId)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
         }
-        return ResponseEntity.ok(employeeService.getEmployeeById(employeeId));
+        return CompletableFuture.completedFuture(ResponseEntity.ok(employeeService.getEmployeeById(employeeId)));
     }
 
     @GetMapping("/meetings")

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class PolicyRetentionRiskController {
@@ -18,7 +19,7 @@ public class PolicyRetentionRiskController {
     }
 
     @GetMapping("/policy-retention-risks")
-    public List<PolicyRetentionRisk> getPolicyRetentionRisksOrderedBySurrenderProbability() {
-        return policyRetentionRiskService.getAllPolicyRetentionRisksOrderedBySurrenderProbability();
+    public CompletableFuture<List<PolicyRetentionRisk>> getPolicyRetentionRisksOrderedBySurrenderProbability() {
+        return CompletableFuture.completedFuture(policyRetentionRiskService.getAllPolicyRetentionRisksOrderedBySurrenderProbability());
     }
 }
