@@ -17,7 +17,7 @@ public class ExcoCompanyController {
     @Autowired
     private ExcoCompanyService excoCompanyService;
 
-    @GetMapping("/search")
+    @GetMapping("/company")
     public ResponseEntity<ExcoCompany> getCompany(
             @RequestParam("ticker") String ticker,
             @RequestParam("fiscal_yr") int fiscalYr) {
