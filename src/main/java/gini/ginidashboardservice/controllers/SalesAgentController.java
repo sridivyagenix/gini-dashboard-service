@@ -25,6 +25,57 @@ public class SalesAgentController {
     @Autowired
     SalesAgentRepository salesAgentRepository;
 
+    @GetMapping("/{id}/details")
+    public ResponseEntity<Map<String, Object>> getSalesAgentDetails(@PathVariable Long id) {
+        Optional<SalesAgent> salesAgent = salesAgentRepository.findById(id);
+
+        if (salesAgent.isPresent()) {
+            SalesAgent agent = salesAgent.get();
+
+            Map<String, Object> response = new HashMap<>();
+
+            // Add performance metrics
+            Map<String, Object> performanceMetrics = new HashMap<>();
+            performanceMetrics.put("performance_segment", agent.getPerformanceSegment());
+            performanceMetrics.put("lifetime_value", agent.getLifetimeValue());
+            performanceMetrics.put("engagement_score", agent.getEngagementScore());
+            performanceMetrics.put("sentiment_60_days", agent.getSentiment60Day());
+            performanceMetrics.put("sales_forecast_30_days", agent.getSalesForecast30Day());
+            response.put("performance_metrics", performanceMetrics);
+
+            // Add strengths
+            String[] strengthsArray = agent.getStrengths().split(", ");
+            response.put("strengths", strengthsArray);
+
+            // Add products
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                List<Map<String, String>> productsMapList = mapper.readValue(
+                        agent.getProducts(),
+                        new TypeReference<List<Map<String, String>>>() {}
+                );
+
+                List<ProductsDTO> productsList = productsMapList.stream()
+                        .map(map -> map.entrySet().stream()
+                                .map(entry -> new ProductsDTO(entry.getKey(), entry.getValue()))
+                                .findFirst()
+                                .orElse(null))
+                        .collect(Collectors.toList());
+                response.put("products", productsList);
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
+            // Add topics
+            String[] topicsArray = agent.getTopics().split(", ");
+            response.put("topics", topicsArray);
+
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @GetMapping("/{id}/performance")
     public ResponseEntity<Map<String, Object>> getPerformanceMetrics(@PathVariable Long id) {
         Optional<SalesAgent> salesAgent = salesAgentRepository.findById(id);
